@@ -308,11 +308,14 @@ ggplot(bikeshare, aes(x = t2, y = cnt)) +
 I'm going to show you a figure on the board from the bikeshare data set. Your job is to replicate the figure within your group (hint: search the web for 'faceting ggplot2')
 
 ``` {r, echo = FALSE} 
-ggplot(bikeshare, aes(x = t2, y = cnt, color = as.factor(is_holiday))) +
+bikeshare %>%
+  mutate(is_holiday = as.factor(ifelse(is_holiday == 0, "No", "Yes"))) %>%
+ggplot(aes(x = t2, y = cnt, color = is_holiday)) +
   geom_jitter(size = 1, alpha = 0.3) + 
   labs(x = "Perceived Temperature (ºC)",
        y = "New Bikeshare Count/Hour", 
        color = "Holiday") +
+  geom_smooth(method = "lm", color = "black") +
   theme_classic() +
   facet_wrap(~ is_holiday)
   
